@@ -26,7 +26,7 @@ export default function(){
             <div className="border-2 border-gray-600 flex flex-col px-4 py-2 gap-2 justify-center items-center">
                 <input 
                     type="email" 
-                    placeholder="email"
+                    placeholder="email or number"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
@@ -41,6 +41,7 @@ export default function(){
                     onClick={async() => {
                         await signIn("email", {
                             email: email,
+                            number: email,
                             password: password,
                             signup: "false",
                             redirect: true

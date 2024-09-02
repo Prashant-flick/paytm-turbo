@@ -3,8 +3,10 @@ import client from "@repo/db/client"
 
 const app = express()
 
-app.post("/hdfcWebHook", async (req, res) => {
+app.use(express.json())
 
+app.post("/hdfcWebHook", async (req, res) => {
+    
     const paymentInformation: {
         token: string,
         userId: string,
@@ -13,7 +15,7 @@ app.post("/hdfcWebHook", async (req, res) => {
         token : req.body.token,
         userId: req.body.user_identifier,
         amount: req.body.amount
-    }
+    }    
 
     try {
         await client.$transaction([
@@ -49,4 +51,6 @@ app.post("/hdfcWebHook", async (req, res) => {
     }
 })
 
-app.listen(3003);
+app.listen(3003, ()=> {
+    console.log("server running on 3003");
+});

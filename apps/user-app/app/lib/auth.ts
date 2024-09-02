@@ -18,25 +18,21 @@ export const authOptions : NextAuthOptions = {
             },
             
             async authorize(credentials: any): Promise<any>{
-                console.log("authorizing");
                 const existingUser = await client.user.findFirst({
                     where: {
-                        email: credentials.email
-                    }
+                        OR: [
+                            { email: credentials.email },
+                            { number: credentials.number }
+                        ]
+                    },
                 });
 
-
-                if(existingUser){
-                    console.log("existing user");
-                    console.log(existingUser);
-                    
-                    const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password)                    
+                if(existingUser){  
+                    const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password)
                     if(passwordValidation){                        
                         return {
                             verifiedPassword: true,
-                            name: existingUser.name,
-                            email: existingUser.email,
-                            number: existingUser.number
+                            user: existingUser
                         }
                     }else{
                         throw new Error("invalid Password")
@@ -51,14 +47,27 @@ export const authOptions : NextAuthOptions = {
                                 email: credentials.email,
                                 password: hashPassword,
                                 auth_type: "Email"
+                            },
+                            select: {
+                                id: true,
+                                name: true,
+                                number: true,
+                                email: true,
+                                auth_type: true
                             }
                         })
 
+                        await client.balance.create({
+                            data: {
+                                userId: res.id,
+                                amount: 0,
+                                locked: 0
+                            }
+                        })                        
+
                         return {
-                            name: res.name,
-                            email: res.email,
-                            number: res.number,
-                            verifiedPassword: true
+                            user: res,
+                            verifiedPassword: true,
                         }
                     }else{
                         throw new Error("user doesn't exist")
@@ -74,22 +83,20 @@ export const authOptions : NextAuthOptions = {
         })
     ],
     callbacks: {
-        async session({token, session, user}: any){
-            console.log("creatign session");
-            console.log(session);
-            console.log(token);
-            console.log(user);
-            
-            session.user.id = token.sub
+        async session({token, session}: any){            
+            session.user = token.user.user            
             return session
+        },
+        async jwt({token, user}: any){
+            if (user) {
+                token.user = user;
+            }
+            return token;
         },
         async redirect({ baseUrl }: any) {
             return baseUrl
         },
-        async signIn({user,account}: any): Promise<any>{
-            console.log("sign in session");
-            console.log(account);
-            
+        async signIn({user,account}: any): Promise<any>{            
             if(account?.provider === "google"){
                 const existingUser = await client.user.findFirst({
                     where: {
@@ -97,11 +104,9 @@ export const authOptions : NextAuthOptions = {
                     }
                 })
                 if(existingUser){
-                    console.log("existing google user");
                     return true;
                 }else{
-                    console.log("new google user");
-                    const res = await client.user.create({
+                    await client.user.create({
                         data: {
                             email: user.email,
                             name: user.name,
@@ -110,18 +115,13 @@ export const authOptions : NextAuthOptions = {
                             auth_type: "Google"
                         }
                     })
-                    console.log(res);
-                    console.log("user created");
                     return true;
                 }
             }else if(account?.provider === "email"){
-                console.log("credentials provider");
                 
                 if(user.verifiedPassword){
-                    console.log("user verified");
                     return true;
                 }else{
-                    console.log("not vaid password");
                     return false;
                 }
             }

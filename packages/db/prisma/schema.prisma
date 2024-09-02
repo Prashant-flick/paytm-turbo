@@ -41,11 +41,11 @@ model Balance {
 
 model onRampTransaction {
   id        Int          @id @default(autoincrement())
-  userId    Int          @unique
+  userId    Int          
   status    onRampStatus
   token     String       @unique
   provider  String
-  amoutn    Int
+  amount    Int
   startTime DateTime
   user      User         @relation(fields: [userId], references: [id])
 }
