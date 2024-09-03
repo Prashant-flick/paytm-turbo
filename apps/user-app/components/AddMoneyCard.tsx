@@ -8,7 +8,7 @@ import { createOnRampTransactions } from "../app/lib/actions/createOnRampTransac
 
 const SUPPORTED_BANKS = [{
     name: "HDFC Bank",
-    redirectUrl: "https://netbanking.hdfcbank.com"
+    redirectUrl: "http://localhost:3004/HDFC/addMoneyToWallet"
 }, {
     name: "Axis Bank",
     redirectUrl: "https://www.axisbank.com/"
@@ -37,8 +37,8 @@ export const AddMoney = () => {
             }))} />
             <div className="flex justify-center pt-4">
                 <Button onClick={async() => {
-                    // window.location.href = redirectUrl || "";
-                    await createOnRampTransactions(bankName, amount)
+                    const res = await createOnRampTransactions(bankName, amount+'00', redirectUrl)
+                    window.location.href = res?.url || '/'
                 }}>
                 Add Money
                 </Button>

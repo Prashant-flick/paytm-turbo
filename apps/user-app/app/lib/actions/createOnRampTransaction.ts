@@ -3,13 +3,8 @@ import client from "@repo/db/client"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../auth"
 
-export async function createOnRampTransactions(provider: string, amount: string){
+export async function createOnRampTransactions(provider: string, amount: string, redirectUrl: string){
     const session = await getServerSession(authOptions);    
-
-    console.log("createOnRampTransactions");
-    console.log(provider);
-    console.log(amount);
-    console.log(session);
 
     if(!session?.user || !session?.user?.id){
         return {
@@ -30,8 +25,11 @@ export async function createOnRampTransactions(provider: string, amount: string)
     })
 
     if(res){
+        const url = `${redirectUrl}?userId=${encodeURIComponent(session.user?.id)}&token=${encodeURIComponent(token)}&amount=${encodeURIComponent(amount)}`;
+
         return {
-            message : "Captured"
+            message : "Captured",
+            url: url
         }
     }else{
         return {
