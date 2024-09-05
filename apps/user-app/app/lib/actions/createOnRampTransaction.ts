@@ -4,8 +4,8 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "../auth"
 
 export async function createOnRampTransactions(provider: string, amount: string, redirectUrl: string){
-    const session = await getServerSession(authOptions);    
-
+    const session = await getServerSession(authOptions);
+    
     if(!session?.user || !session?.user?.id){
         return {
             message: "Unauthenticated request"

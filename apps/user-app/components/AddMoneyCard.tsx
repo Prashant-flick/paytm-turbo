@@ -16,7 +16,7 @@ const SUPPORTED_BANKS = [{
 
 export const AddMoney = () => {
     const [redirectUrl, setRedirectUrl] = useState<string>(SUPPORTED_BANKS[0]?.redirectUrl||"");
-    const [amount, setAmount] = useState<string>("0")
+    const [amount, setAmount] = useState<string>("")
     const [bankName, setBankName] = useState<string>(SUPPORTED_BANKS[0]?.name||"")
 
     return (

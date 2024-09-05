@@ -22,6 +22,8 @@ model User {
   auth_type         AuthType
   onRampTransaction onRampTransaction[]
   Balance           Balance[]
+  sentTransfers p2pTransfer[] @relation(name: "FromUserRelation")
+  receivedTransfers p2pTransfer[] @relation(name: "ToUserRelation")
 }
 
 model Merchant {
@@ -48,6 +50,16 @@ model onRampTransaction {
   amount    Int
   startTime DateTime
   user      User         @relation(fields: [userId], references: [id])
+}
+
+model p2pTransfer {
+  id Int @id @default(autoincrement())
+  fromUserId Int
+  toUserId Int
+  fromUser User @relation(name: "FromUserRelation", fields: [fromUserId], references: [id])
+  toUser User @relation(name: "ToUserRelation", fields: [toUserId], references: [id])
+  amount Int
+  timestamp DateTime
 }
 
 enum AuthType {
