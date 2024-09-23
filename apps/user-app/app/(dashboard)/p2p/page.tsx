@@ -5,8 +5,9 @@ import { authOptions } from "../../lib/auth";
 import { SendCard } from "../../../components/SendCard";
 import { P2pTransaction } from "../../../components/P2pTransaction"
 
+const session = await getServerSession(authOptions);
+
 async function getBalance() {
-    const session = await getServerSession(authOptions);
     const balance = await prisma.balance.findFirst({
         where: {
             userId: Number(session?.user?.id)
@@ -19,7 +20,6 @@ async function getBalance() {
 }
 
 async function getP2pTransaction() {
-    const session = await getServerSession(authOptions);
     const txns = await prisma.p2pTransfer.findMany({
         where: {
             OR: [

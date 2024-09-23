@@ -9,7 +9,6 @@ export default function(){
     const [password, setPassword] = useState<string>("")
     const searchParams = useSearchParams()    
     const error = searchParams.get("error")
-    console.log(error);
 
     const showError = () => {
         if(error){
