@@ -2,7 +2,9 @@ import client from "@repo/db/client"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcrypt"
 import GoogleProvider from "next-auth/providers/google";
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, User } from "next-auth";
+import { JWT } from "next-auth/jwt";
+import { AdapterUser } from "next-auth/adapters";
 
 export const authOptions : NextAuthOptions = {
     providers: [
@@ -87,7 +89,7 @@ export const authOptions : NextAuthOptions = {
             session.user = token.user.user            
             return session
         },
-        async jwt({token, user}: any){
+        async jwt({token, user}: {token: JWT, user: User | AdapterUser}){
             if (user) {
                 token.user = user;
             }

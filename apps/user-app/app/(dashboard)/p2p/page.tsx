@@ -1,13 +1,12 @@
 import prisma from "@repo/db/client";
 import { BalanceCard } from "../../../components/BalanceCard";
-import { getServerSession } from "next-auth";
+import { getServerSession, Session } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import { SendCard } from "../../../components/SendCard";
 import { P2pTransaction } from "../../../components/P2pTransaction"
 
-const session = await getServerSession(authOptions);
-
 async function getBalance() {
+    const session: Session | null = await getServerSession(authOptions);
     const balance = await prisma.balance.findFirst({
         where: {
             userId: Number(session?.user?.id)
@@ -20,6 +19,7 @@ async function getBalance() {
 }
 
 async function getP2pTransaction() {
+    const session: Session | null = await getServerSession(authOptions);
     const txns = await prisma.p2pTransfer.findMany({
         where: {
             OR: [
