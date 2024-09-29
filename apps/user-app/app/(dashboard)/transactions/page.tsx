@@ -3,8 +3,16 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import { AllTrasactions } from "../../../components/AllTransactions";
 
+interface newSession {
+    user?: {
+        id?: string | null,
+        name?: string | null,
+        email?: string | null,
+    }
+}
+
 async function getTransaction() {
-    const session = await getServerSession(authOptions);
+    const session: newSession | null = await getServerSession(authOptions);
     const user = session?.user
     const txns = await db.onRampTransaction.findMany({ where: { userId: Number(session?.user?.id) } });
     const txns2 = await db.p2pTransfer.findMany({
