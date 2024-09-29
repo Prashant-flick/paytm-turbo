@@ -3,9 +3,15 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "../auth"
 import prisma from "@repo/db/client"
 
+interface User {
+    id?: string | null,
+    name?: string | null,
+    email?: string | null,
+}
+
 export async function p2pTransfer(to: string, amount: number){
     const session = await getServerSession(authOptions)
-    const user = session?.user
+    const user: User | undefined = session?.user
     const from = user?.id
 
     if(!from){

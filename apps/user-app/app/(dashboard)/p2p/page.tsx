@@ -5,9 +5,15 @@ import { authOptions } from "../../lib/auth";
 import { SendCard } from "../../../components/SendCard";
 import { P2pTransaction } from "../../../components/P2pTransaction"
 
+interface User {
+    id?: string | null,
+    name?: string | null,
+    email?: string | null,
+}
+
 async function getBalance() {
     const session: Session | null = await getServerSession(authOptions);
-    const user = session?.user
+    const user: User | undefined = session?.user
     const balance = await prisma.balance.findFirst({
         where: {
             userId: Number(user?.id)
