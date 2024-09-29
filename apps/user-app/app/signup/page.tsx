@@ -21,9 +21,6 @@ export default function(){
         } catch (error) {
             throw new Error("signup failed")
         }
-
-        
-
     }
 
     return (
