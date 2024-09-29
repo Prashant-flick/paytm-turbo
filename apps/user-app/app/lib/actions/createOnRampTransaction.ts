@@ -5,8 +5,9 @@ import { authOptions } from "../auth"
 
 export async function createOnRampTransactions(provider: string, amount: string, redirectUrl: string){
     const session = await getServerSession(authOptions);
+    const user = session?.user
     
-    if(!session?.user || !session?.user?.id){
+    if(!user || !user?.id){
         return {
             message: "Unauthenticated request"
         }
@@ -15,7 +16,7 @@ export async function createOnRampTransactions(provider: string, amount: string,
     const token = (Math.random() * 10000).toString()
     const res = await client.onRampTransaction.create({
         data: {
-            userId: Number(session?.user?.id),
+            userId: Number(user?.id),
             amount: Number(amount),
             status: "Processing",
             token: token,
@@ -25,7 +26,7 @@ export async function createOnRampTransactions(provider: string, amount: string,
     })
 
     if(res){
-        const url = `${redirectUrl}?userId=${encodeURIComponent(session.user?.id)}&token=${encodeURIComponent(token)}&amount=${encodeURIComponent(amount)}`;
+        const url = `${redirectUrl}?userId=${encodeURIComponent(user?.id)}&token=${encodeURIComponent(token)}&amount=${encodeURIComponent(amount)}`;
 
         return {
             message : "Captured",

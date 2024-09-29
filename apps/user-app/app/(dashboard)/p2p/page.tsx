@@ -7,9 +7,10 @@ import { P2pTransaction } from "../../../components/P2pTransaction"
 
 async function getBalance() {
     const session: Session | null = await getServerSession(authOptions);
+    const user = session?.user
     const balance = await prisma.balance.findFirst({
         where: {
-            userId: Number(session?.user?.id)
+            userId: Number(user?.id)
         }
     });
     return {
@@ -20,11 +21,12 @@ async function getBalance() {
 
 async function getP2pTransaction() {
     const session: Session | null = await getServerSession(authOptions);
+    const user = session?.user
     const txns = await prisma.p2pTransfer.findMany({
         where: {
             OR: [
-                {fromUserId: Number(session?.user?.id)},
-                {toUserId: Number(session?.user?.id)}
+                {fromUserId: Number(user?.id)},
+                {toUserId: Number(user?.id)}
             ]
         }
     });

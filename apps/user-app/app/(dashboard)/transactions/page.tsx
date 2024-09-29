@@ -5,12 +5,13 @@ import { AllTrasactions } from "../../../components/AllTransactions";
 
 async function getTransaction() {
     const session = await getServerSession(authOptions);
+    const user = session?.user
     const txns = await db.onRampTransaction.findMany({ where: { userId: Number(session?.user?.id) } });
     const txns2 = await db.p2pTransfer.findMany({
         where: {
             OR:[
-                {fromUserId: Number(session?.user?.id)},
-                {toUserId: Number(session?.user?.id)}
+                {fromUserId: Number(user?.id)},
+                {toUserId: Number(user?.id)}
             ]
         }
     });
