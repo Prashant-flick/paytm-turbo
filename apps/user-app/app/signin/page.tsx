@@ -2,23 +2,27 @@
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from 'react'
 import Link from "next/link";
+
+function ShowError() {
+    const searchParams = useSearchParams()
+    const error = searchParams.get("error")
+    if(error){
+        return (
+            <div className="flex flex-col items-center justify-center">
+                <h1 className="text-red-900">{error}</h1>
+            </div>
+        );
+    }
+    return null
+}
 
 export default function(){
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const searchParams = useSearchParams()    
-    const error = searchParams.get("error")
 
-    const showError = () => {
-        if(error){
-            return (
-                <div className="flex flex-col items-center justify-center">
-                    <h1 className="text-red-900">{error}</h1>
-                </div>
-            )
-        }
-    }
+    
     
     return (
         <div className="bg-black h-screen w-full flex items-center justify-center">
@@ -58,7 +62,9 @@ export default function(){
                     Login with Google
                 </button>
                 <Link className="text-white hover:text-gray-400" href="/signup">Sign Up</Link>
-                {showError()}
+                <Suspense>
+                    <ShowError />
+                </Suspense>
             </div>
         </div>
     )

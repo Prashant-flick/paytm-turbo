@@ -3,15 +3,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import { AllTrasactions } from "../../../components/AllTransactions";
 
-const session = await getServerSession(authOptions);
-
 async function getTransaction() {
-    const txns = await db.onRampTransaction.findMany({ where: { userId: session?.user?.id } });
+    const session = await getServerSession(authOptions);
+    const txns = await db.onRampTransaction.findMany({ where: { userId: Number(session?.user?.id) } });
     const txns2 = await db.p2pTransfer.findMany({
         where: {
             OR:[
-                {fromUserId: session?.user?.id},
-                {toUserId: session?.user?.id}
+                {fromUserId: Number(session?.user?.id)},
+                {toUserId: Number(session?.user?.id)}
             ]
         }
     });
