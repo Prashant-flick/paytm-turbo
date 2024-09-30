@@ -24,10 +24,10 @@ jobs:
         context: .
         file: ./docker/Dockerfile.user
         push: true
-        tags: prashantflick/user-paytm:latest
+        tags: prashantflick/paytm-turbo-user:latest
       
     - name: Verify Pushed Image
-      run: docker pull prashantflick/user-paytm:latest
+      run: docker pull prashantflick/paytm-turbo-user:latest
 
     - name: Deploy to EC2
       uses: appleboy/ssh-action@master
@@ -36,7 +36,7 @@ jobs:
         username: ${{secrets.SSH_USERNAME}}
         key: ${{secrets.SSH_KEY}}
         script: |
-          sudo docker pull prashantflick/user-paytm:latest
+          sudo docker pull prashantflick/paytm-turbo-user:latest
           sudo docker stop user-app || true
           sudo docker rm user-app || true
-          sudo docker run -d --name user-app -p 3000:3000 prashantflick/user-paytm:latest
+          sudo docker run -d --name user-app -p 3001:3001 prashantflick/paytm-turbo-user:latest -e DATABASE_URL=${{secrets.DATABASE_URL}} -e NEXTAUTH_URL=${{secrets.NEXTAUTH_URL}} -e NEXTAUTH_SECRET=${{secrets.NEXTAUTH_SECRET}} -e GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}} -e GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}}

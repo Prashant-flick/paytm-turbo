@@ -29,12 +29,10 @@ export const authOptions : NextAuthOptions = {
                     },
                 });
 
-                if(existingUser){  
+                if(existingUser){
                     const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password)
                     if(passwordValidation){                        
-                        return {
-                            user: existingUser
-                        }
+                        return existingUser
                     }else{
                         throw new Error("invalid Password")
                     }
@@ -66,9 +64,7 @@ export const authOptions : NextAuthOptions = {
                             }
                         })                        
 
-                        return {
-                            user: res,
-                        }
+                        return res
                     }else{
                         throw new Error("user doesn't exist")
                     }
@@ -88,6 +84,9 @@ export const authOptions : NextAuthOptions = {
             return session
         },
         async jwt({token, user}: {token: JWT, user: User | AdapterUser}){
+            console.log(user);
+            console.log(token);
+            
             if (user) {
                 token.name = user.name;
                 token.email = user.email

@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx esbuild ./src/index.ts --bundle --platform=node --outfile=dist/index.js",
-    "start": "nodemon dist/index.js",
+    "start": "nodemon dist/index.js --turbo --port 3003",
     "dev": "npm run build && npm start"
   },
   "keywords": [],
