@@ -1,18 +1,10 @@
 "use server"
-import { getServerSession } from "next-auth"
+import { getServerSession, Session } from "next-auth"
 import { authOptions } from "../auth"
 import prisma from "@repo/db/client"
 
-interface newSession {
-    user?: {
-        id?: string | null,
-        name?: string | null,
-        email?: string | null,
-    }
-}
-
 export async function p2pTransfer(to: string, amount: number){
-    const session: newSession | null = await getServerSession(authOptions)
+    const session: Session | null = await getServerSession(authOptions)
     const user = session?.user
     const from = user?.id
 

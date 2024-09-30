@@ -1,8 +1,8 @@
 import { Button } from "@repo/ui/button";
-import { getServerSession } from "next-auth";
+import { getServerSession, Session } from "next-auth";
 
 export default async function Home() {
-  const session = await getServerSession();
+  const session: Session | null = await getServerSession();
 
   const handleOnClick = () => {
     console.log("hello");

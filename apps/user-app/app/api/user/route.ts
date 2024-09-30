@@ -1,17 +1,9 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getServerSession, Session } from "next-auth";
 import { authOptions } from "../../lib/auth";
 
-interface newSession {
-    user?: {
-        id?: string | null,
-        name?: string | null,
-        email?: string | null,
-    }
-}
-
 export const GET = async () => {    
-    const session: newSession | null = await getServerSession(authOptions);
+    const session: Session | null = await getServerSession(authOptions);
     const user = session?.user
     if (user) {
         return NextResponse.json({

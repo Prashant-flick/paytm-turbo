@@ -1,18 +1,10 @@
 "use server"
 import client from "@repo/db/client"
-import { getServerSession } from "next-auth"
+import { getServerSession, Session } from "next-auth"
 import { authOptions } from "../auth"
 
-interface newSession {
-    user?: {
-        id?: string | null,
-        name?: string | null,
-        email?: string | null,
-    }
-}
-
 export async function createOnRampTransactions(provider: string, amount: string, redirectUrl: string){
-    const session: newSession | null = await getServerSession(authOptions);
+    const session: Session | null = await getServerSession(authOptions);
     const user = session?.user
     
     if(!user || !user?.id){

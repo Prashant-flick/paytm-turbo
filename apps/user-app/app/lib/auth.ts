@@ -2,7 +2,7 @@ import client from "@repo/db/client"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcrypt"
 import GoogleProvider from "next-auth/providers/google";
-import { NextAuthOptions, User } from "next-auth";
+import { Account, NextAuthOptions, User, Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import { AdapterUser } from "next-auth/adapters";
 
@@ -33,7 +33,6 @@ export const authOptions : NextAuthOptions = {
                     const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password)
                     if(passwordValidation){                        
                         return {
-                            verifiedPassword: true,
                             user: existingUser
                         }
                     }else{
@@ -69,7 +68,6 @@ export const authOptions : NextAuthOptions = {
 
                         return {
                             user: res,
-                            verifiedPassword: true,
                         }
                     }else{
                         throw new Error("user doesn't exist")
@@ -78,31 +76,35 @@ export const authOptions : NextAuthOptions = {
             }
         }),
         GoogleProvider({
-            // eslint-disable-next-line turbo/no-undeclared-env-vars
             clientId: process.env.GOOGLE_CLIENT_ID || "",
-            // eslint-disable-next-line turbo/no-undeclared-env-vars
             clientSecret: process.env.GOOGLE_CLIENT_SECRET || ""
         })
     ],
     callbacks: {
-        async session({token, session}: any){            
-            session.user = token.user.user            
+        async session({token, session}: {token: JWT, session: Session}): Promise<Session>{            
+            session.user.name = token.name
+            session.user.email = token.email
+            session.user.id = token.sub
             return session
         },
         async jwt({token, user}: {token: JWT, user: User | AdapterUser}){
             if (user) {
-                token.user = user;
+                token.name = user.name;
+                token.email = user.email
+                token.sub = user.id
             }
             return token;
         },
-        async redirect({ baseUrl }: any) {
+        async redirect({ baseUrl }: {baseUrl: string}) {
             return baseUrl
         },
-        async signIn({user,account}: any): Promise<any>{            
+        async signIn({
+            user,account
+        }: { user: User | AdapterUser, account: Account | null }): Promise<string | boolean>{            
             if(account?.provider === "google"){
                 const existingUser = await client.user.findFirst({
                     where: {
-                        email : user.email
+                        email : user.email as string
                     }
                 })
                 if(existingUser){
@@ -110,8 +112,8 @@ export const authOptions : NextAuthOptions = {
                 }else{
                     await client.user.create({
                         data: {
-                            email: user.email,
-                            name: user.name,
+                            email: user.email as string,
+                            name: user.name as string,
                             password: "",
                             number: "",
                             auth_type: "Google"
@@ -120,16 +122,11 @@ export const authOptions : NextAuthOptions = {
                     return true;
                 }
             }else if(account?.provider === "email"){
-                
-                if(user.verifiedPassword){
-                    return true;
-                }else{
-                    return false;
-                }
+                return true;
             }
+            return false;
         }   
     },
-    // eslint-disable-next-line turbo/no-undeclared-env-vars
     secret: process.env.NEXTAUTH_SECRET || "secret",
     pages: {
         signIn: "/signin",
