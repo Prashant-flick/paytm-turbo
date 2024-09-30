@@ -26,5 +26,17 @@ jobs:
         push: true
         tags: prashantflick/user-paytm:latest
       
-    # - name: Verify Pushed Image
-    #   run: docker pull prashantflick/user-paytm:latest
+    - name: Verify Pushed Image
+      run: docker pull prashantflick/user-paytm:latest
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{secrets.SSH_HOST}}
+        username: ${{secrets.SSH_USERNAME}}
+        key: ${{secrets.SSH_KEY}}
+        script: |
+          sudo docker pull prashantflick/user-paytm:latest
+          sudo docker stop user-app || true
+          sudo docker rm user-app || true
+          suco docker run -d --name user-app -p 3000:3000 prashantflick/user-paytm:latest
