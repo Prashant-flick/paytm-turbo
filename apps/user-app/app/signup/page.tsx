@@ -6,7 +6,7 @@ export default function(){
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [name, setName] = useState<string>("")
-    const [number, setNumber] = useState<string>("")
+    const [number, setNumber] = useState<string>("") 
 
     const handleSignIn = async() => {
         try {
