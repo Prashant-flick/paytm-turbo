@@ -37,9 +37,9 @@ jobs:
         key: ${{secrets.SSH_KEY}}
         script: |
           sudo docker pull prashantflick/paytm-turbo-user:latest
-          sudo docker stop user-app || true
-          sudo docker rm user-app || true
-          sudo docker run -d --name user-app -p 3001:3001 \
+          sudo docker stop paytm-turbo-user || true
+          sudo docker rm paytm-turbo-user || true
+          sudo docker run -d --name paytm-turbo-user -p 3001:3001 \
           -e DATABASE_URL=${{secrets.DATABASE_URL}} \
           -e NEXTAUTH_URL=${{secrets.NEXTAUTH_URL}} \
           -e NEXTAUTH_SECRET=${{secrets.NEXTAUTH_SECRET}} \
