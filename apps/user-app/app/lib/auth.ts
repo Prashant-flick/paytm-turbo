@@ -84,8 +84,6 @@ export const authOptions : NextAuthOptions = {
             return session
         },
         async jwt({token, user}: {token: JWT, user: User | AdapterUser}){
-            console.log(user);
-            console.log(token);
             
             if (user) {
                 token.name = user.name;
