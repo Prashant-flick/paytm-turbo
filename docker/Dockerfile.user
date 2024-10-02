@@ -5,6 +5,7 @@ WORKDIR /user/src/app
 COPY package.json package-lock.json turbo.json tsconfig.json ./
 
 COPY apps/user-app ./apps/user-app
+COPY apps/bank_webhook_handler ./apps/bank_webhook_handler
 COPY packages ./packages
 
 RUN npm install
@@ -12,5 +13,6 @@ RUN npm install
 RUN npm run db:generate
 
 RUN npm run build-user-app
+RUN npm run build-bank-webhook-app
 
-CMD ["npm", "run", "start-user-app"]
+CMD ["npm", "run", "start-user-app-and-bank-webhook"]

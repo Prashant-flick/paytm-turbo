@@ -39,11 +39,5 @@ jobs:
           sudo docker pull prashantflick/paytm-turbo-user:latest
           sudo docker stop user-paytm || true
           sudo docker rm user-paytm || true
-          docker run -d -p 3001:3001 \
-          -e DATABASE_URL=${{secrets.DATABASE_URL}} \
-          -e NEXTAUTH_URL=${{secrets.NEXTAUTH_URL}} \
-          -e NEXTAUTH_SECRET=${{secrets.NEXTAUTH_SECRET}} \
-          -e GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}} \
-          -e GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}} \
-          prashantflick/paytm-turbo-user:latest
+          docker run --name user-paytm -d -p 3001:3001 -e DATABASE_URL=${{secrets.DATABASE_URL}} -e NEXTAUTH_URL=${{secrets.NEXTAUTH_URL}} -e NEXTAUTH_SECRET=${{secrets.NEXTAUTH_SECRET}} -e GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}} -e GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}} prashantflick/paytm-turbo-user:latest
 

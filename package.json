@@ -7,8 +7,10 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:generate": "cd packages/db && npx prisma generate && cd ../..",
-    "start-user-app": "cd apps/user-app && npm run dev && cd ../..",
-    "build-user-app": "cd apps/user-app && npm run build && cd ../.."
+    "start-user-app": "cd apps/user-app && npm run dev && cd ../.. && npm run start-bank-webhook",
+    "build-user-app": "cd apps/user-app && npm run build && cd ../..",
+    "build-bank-webhook-app": "cd apps/bank_webhook_handler && npm run build && cd ../..",
+    "start-bank-webhook": "cd apps/bank_webhook_handler && npm run start && cd ../.."
   },
   "devDependencies": {
     "prettier": "^3.2.5",
