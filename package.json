@@ -7,10 +7,11 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:generate": "cd packages/db && npx prisma generate && cd ../..",
-    "start-user-app": "cd apps/user-app && npm run dev && cd ../.. && npm run start-bank-webhook",
+    "start-user-app": "cd apps/user-app && npm run dev && cd ../..",
     "build-user-app": "cd apps/user-app && npm run build && cd ../..",
     "build-bank-webhook-app": "cd apps/bank_webhook_handler && npm run build && cd ../..",
-    "start-bank-webhook": "cd apps/bank_webhook_handler && npm run start && cd ../.."
+    "start-bank-webhook": "cd apps/bank_webhook_handler && npm run start && cd ../..",
+    "start-user-app-and-bank-webhook": "concurrently \"npm run start-user-app\" \"npm run start-bank-webhook\""
   },
   "devDependencies": {
     "prettier": "^3.2.5",
@@ -27,6 +28,7 @@
   ],
   "dependencies": {
     "@types/node": "^22.5.2",
+    "concurrently": "^9.0.1",
     "ts-node": "^10.9.2"
   }
 }
