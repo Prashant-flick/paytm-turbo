@@ -30,7 +30,7 @@ async function getTransaction() {
         amount: t.amount,
         from: (t.fromUserId === Number(session?.user?.id) ? 1 : 0),
         to: (t.toUserId === Number(session?.user?.id) ? 1 : 0),
-        provider: (t.fromUserId === Number(session?.user?.id) ? String(t.fromUserId) : String(t.toUserId)),
+        provider: (t.fromUserId === Number(session?.user?.id) ? String(t.toUserId) : String(t.fromUserId)),
         status: ""
     }));
 

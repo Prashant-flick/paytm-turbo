@@ -84,7 +84,6 @@ export const authOptions : NextAuthOptions = {
             return session
         },
         async jwt({token, user}: {token: JWT, user: User | AdapterUser}){
-            
             if (user) {
                 token.name = user.name;
                 token.email = user.email
@@ -105,6 +104,7 @@ export const authOptions : NextAuthOptions = {
                     }
                 })
                 if(existingUser){
+                    user.id = String(existingUser.id)
                     return true;
                 }else{
                     await client.user.create({
