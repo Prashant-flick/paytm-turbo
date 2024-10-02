@@ -39,5 +39,5 @@ jobs:
           sudo docker pull prashantflick/paytm-turbo-user:latest
           sudo docker stop user-paytm || true
           sudo docker rm user-paytm || true
-          sudo docker run --name user-paytm -d -p 3001:3001 prashantflick/paytm-turbo-user:latest
+          sudo docker run --name user-paytm -d -p 3001:3001 -p 3003:3003 prashantflick/paytm-turbo-user:latest
 
