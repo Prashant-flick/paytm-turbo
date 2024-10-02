@@ -8,7 +8,7 @@ import { createOnRampTransactions } from "../app/lib/actions/createOnRampTransac
 
 const SUPPORTED_BANKS = [{
     name: "HDFC Bank",
-    redirectUrl: "http://localhost:3004/HDFC/addMoneyToWallet"
+    redirectUrl: "http://hdfc.jackbythehedge.co.uk/HDFC/addMoneyToWallet"
 }, {
     name: "Axis Bank",
     redirectUrl: "https://www.axisbank.com/"
