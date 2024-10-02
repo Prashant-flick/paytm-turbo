@@ -1,8 +1,12 @@
 import express from "express";
 import client from "@repo/db/client"
+import cors from "cors"
 
 const app = express()
 
+app.use(cors({
+    origin: "*"
+}))
 app.use(express.json())
 
 app.post("/hdfcWebHook", async (req, res) => {
